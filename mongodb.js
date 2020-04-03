@@ -1,8 +1,10 @@
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
+const {MongoClient, ObjectID} = require('mongodb');
 
 const connectionURL = 'mongodb://127.0.0.1:27017';
 const databaseName = 'task-manager';
+
+const id = new ObjectID();
+console.log(id.id);
 
 MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
 
@@ -11,6 +13,24 @@ MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
     }
 
     const db = client.db(databaseName);
+
+    db.collection('users').findOne({name: 'Roman'}, (error, user) => {
+        if (error) return console.log('Unable to fetch!');
+
+        console.log(user);
+    });
+
+    db.collection('tasks').find({completed: true}).toArray((error, tasks) => {
+        if (error) return console.log('Unable to fetch!');
+
+        console.log(tasks);
+    });
+
+    db.collection('tasks').find({completed: true}).count((error, count) => {
+        if (error) return console.log('Unable to fetch!');
+
+        console.log(count);
+    });
     /*
     db.collection('users').insertOne({
         name: 'Roman',
@@ -39,7 +59,7 @@ MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
 
         console.log(result.ops);
     })
-     */
+
 
     db.collection('tasks').insertMany([
         {
@@ -61,4 +81,5 @@ MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
 
         console.log(result.ops);
     })
+     */
 });
