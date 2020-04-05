@@ -1,0 +1,45 @@
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+const User = mongoose.model('User', {
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        lovercase: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Email is invalid!');
+            }
+        }
+    },
+
+    password: {
+        type: String,
+        required: true,
+        minlength: 7,
+        trim: true,
+        validate(value) {
+            if (value.toLowerCase().includes('password')) {
+                throw new Error('Password can\'t contain "password"');
+            }
+        }
+    },
+
+    year: {
+        type: Number,
+        validate(value) {
+            if (value < (new Date().getFullYear() - 100) && value > (new Date().getFullYear() - 18)) {
+                throw new Error('Age must be between 18 and 100');
+            }
+        }
+    }
+});
+
+module.exports = User;
