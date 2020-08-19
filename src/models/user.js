@@ -37,8 +37,9 @@ const userSchema = new mongoose.Schema({
 
     year: {
         type: Number,
+        required: true,
         validate(value) {
-            if (value < (new Date().getFullYear() - 100) && value > (new Date().getFullYear() - 18)) {
+            if (value < (new Date().getFullYear() - 100) || value > (new Date().getFullYear() - 18)) {
                 throw new Error('Age must be between 18 and 100');
             }
         }
